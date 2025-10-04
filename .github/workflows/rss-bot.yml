@@ -2,10 +2,9 @@ name: 📡 RSS 财经新闻自动推送
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 北京时间 9:00 (UTC 1:00)
-    - cron: '0 10 * * *'  # 北京时间 17:00 (UTC 9:00)
-
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 1 * * *'   # 每天 UTC 1:00 → 北京时间 9:00
+    - cron: '0 9 * * *'   # 每天 UTC 9:00 → 北京时间 17:00
+  workflow_dispatch:      # 允许手动触发
 
 jobs:
   run-script:
@@ -19,17 +18,23 @@ jobs:
         with:
           python-version: '3.9'
 
+      - name: 🧪 调试：确认环境
+        run: |
+          echo "Workflow triggered at $(date)"
+          python --version
+          pip --version
+
       - name: 📦 安装依赖
         run: |
           cd $GITHUB_WORKSPACE
-          pip install -U pip setuptools wheel
-          pip install lxml[html_clean] 
+          pip install --upgrade pip setuptools wheel
+          pip install lxml[html_clean]
           pip install -r requirements.txt
 
-      - name: FINANCE_MESSAGE_MANEGER
+      - name: 🌐 配置环境变量
         run: |
-          echo "OPENAI_API_KEY=${{ sk-fc20b47184cf4e9d9e4bfc10e81f20af}}" >> $GITHUB_ENV
-          echo "SERVER_CHAN_KEYS=${{ SCT298196TniYC43YBsTWJrwhgHdt2E7bV }}" >> $GITHUB_ENV
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $GITHUB_ENV
+          echo "SERVER_CHAN_KEYS=${{ secrets.SERVER_CHAN_KEYS }}" >> $GITHUB_ENV
 
       - name: 🚀 运行脚本
         run: python financebot.py
