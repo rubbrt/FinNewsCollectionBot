@@ -26,7 +26,7 @@ jobs:
           pip install lxml[html_clean] 
           pip install -r requirements.txt
 
-      - name: 🔑 设置环境变量
+      - name: FINANCE_MESSAGE_MANEGER
         run: |
           echo "OPENAI_API_KEY=${{ sk-fc20b47184cf4e9d9e4bfc10e81f20af}}" >> $GITHUB_ENV
           echo "SERVER_CHAN_KEYS=${{ SCT298196TniYC43YBsTWJrwhgHdt2E7bV }}" >> $GITHUB_ENV
